@@ -1,6 +1,6 @@
 
 
-$(function() {
+window.onload = function() {
     var austinLatLong = [30.2672, -97.7431];
     var initialZoom = 10;
 
@@ -10,8 +10,6 @@ $(function() {
         wheelPxPerZoomLevel: 300
     }).setView(austinLatLong, initialZoom);
 
-
-    // weirdly host=localhost seems to only not work on mobile ?!?
     var austin1940 = L.tileLayer.wms('http://maps.parkertimmins.com:8080/geoserver/wms?SERVICE=WMS', {
         tiled: true,
         layers: 'poly_1_jpeg_pyramid_dir',
@@ -22,30 +20,29 @@ $(function() {
         format: 'image/png' // necessary for transparency
     }).addTo(map);
 
-
-    // Google map layers
-    var roadGoogle = L.gridLayer.googleMutant({
-        maxZoom: 20,
-        type: 'roadmap'
-    }).addTo(map);
-    var hybridGoogle = L.gridLayer.googleMutant({
-        maxZoom: 20,
-        type: 'hybrid'
-    }).addTo(map);
-    var satelliteGoogle = L.gridLayer.googleMutant({
-        maxZoom: 20,
-        type: 'satellite'
+    var satelliteNow = L.tileLayer.wms('https://basemap.nationalmap.gov:443/arcgis/services/USGSImageryOnly/MapServer/WmsServer', {
+        tiled: true,
+        layers: '0',
+        attribution: '<a href="https://basemap.nationalmap.gov/">USGS</a>',
+        maxZoom: 15, /// maximum zoom on available from USGS
+        maxNativeZoom: 15
     }).addTo(map);
 
-    // use https://github.com/perliedman/leaflet-control-geocoder with OSM geocoder
+    var topoNow = L.tileLayer.wms('https://basemap.nationalmap.gov:443/arcgis/services/USGSTopo/MapServer/WmsServer?', {
+        tiled: true,
+        layers: '0',
+        attribution: '<a href="https://basemap.nationalmap.gov/">USGS</a>',
+        maxZoom: 15,
+        maxNativeZoom: 15
+    }).addTo(map);
+
 
     var baseMaps = {
-        "Roads": roadGoogle,
-        "Hybrid": hybridGoogle,
-        "Satellite": satelliteGoogle
+        "Topographic ": topoNow,
+        "Satellite": satelliteNow 
     };
     var overlayMaps = {
         "Austin 1940": austin1940
     };
     L.control.layers(baseMaps, overlayMaps).addTo(map);
-});
+}

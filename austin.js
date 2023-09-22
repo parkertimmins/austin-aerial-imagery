@@ -10,7 +10,7 @@ window.onload = function() {
         wheelPxPerZoomLevel: 300
     }).setView(austinLatLong, initialZoom);
 
-    var austin1940 = L.tileLayer.wms('http://maps.parkertimmins.com:8080/geoserver/wms?SERVICE=WMS', {
+    var austin1940 = L.tileLayer.wms('https://maps.parkertimmins.com:8080/geoserver/wms?SERVICE=WMS', {
         tiled: true,
         layers: 'poly_1_jpeg_pyramid_dir',
         attribution: '<a href="https://library.austintexas.gov/ahc/aerial-photographs">Austin Historical Center</a>',
